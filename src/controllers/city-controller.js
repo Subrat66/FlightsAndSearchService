@@ -23,6 +23,28 @@ const create = async (req, res) => {
   }
 };
 
+// POST -> /cities
+const bulkCreate = async (req, res) => {
+  try {
+    // console.log(req.body);
+    const cities = await cityService.createCities(req.body);
+    return res.status(201).json({
+      data: cities,
+      success: true,
+      message: "Successfully created the cities",
+      err: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      data: {},
+      success: false,
+      message: "Not able to create the cities",
+      err: error,
+    });
+  }
+};
+
 // DELETE -> /city/:id
 const destroy = async (req, res) => {
   try {
@@ -106,10 +128,32 @@ const getAll = async (req, res) => {
   }
 };
 
+// GET -> /city/:id/airport
+const getAllAirports = async (req, res) => {
+  try {
+    const airports = await cityService.getAllAirports(req.params.id);
+    return res.status(200).json({
+      data: airports,
+      success: true,
+      message: "Successfully fetched all airports for the city",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      data: {},
+      success: false,
+      message: "Not able to get the airports for the city",
+      err: error,
+    });
+  }
+};
+
 module.exports = {
   create,
+  bulkCreate,
   destroy,
   update,
   get,
   getAll,
+  getAllAirports,
 };

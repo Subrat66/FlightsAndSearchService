@@ -1,11 +1,21 @@
 const { Op } = require("sequelize");
-const { City } = require("../models/index");
+const { City, Airport } = require("../models/index");
 
 class CityRepository {
   async createCity({ name }) {
     try {
       const city = await City.create({ name });
       return city;
+    } catch (error) {
+      console.log("Something went wrong at the repository");
+      throw { error };
+    }
+  }
+
+  async createCities(arr) {
+    try {
+      const cities = await City.bulkCreate(arr);
+      return cities;
     } catch (error) {
       console.log("Something went wrong at the repository");
       throw { error };
@@ -75,6 +85,21 @@ class CityRepository {
       city.name = data.name;
       await city.save();
       return city;
+    } catch (error) {
+      console.log("Something went wrong at the repository");
+      throw { error };
+    }
+  }
+
+  async getAllAirports(cityId) {
+    try {
+      const airports = await City.findAll({
+        where: {
+          id: cityId,
+        },
+        include: Airport,
+      });
+      return airports;
     } catch (error) {
       console.log("Something went wrong at the repository");
       throw { error };
